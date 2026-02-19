@@ -1,0 +1,5 @@
+botConfig:
+  botToken: ${BOT_TOKEN}
+
+apiConfig:
+  apiToken: ${API_TOKEN}
