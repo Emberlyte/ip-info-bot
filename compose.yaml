@@ -1,0 +1,14 @@
+services:
+  ip-bot:
+    build: .
+    container_name: ip_info_bot
+    restart: unless-stopped
+    volumes:
+      - ./src/main/resources/application.yaml:/app/application.yaml
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - API_TOKEN=${API_TOKEN}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"

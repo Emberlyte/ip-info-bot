@@ -14,6 +14,16 @@ application {
     mainClass.set("com.github.emberlyte.ApplicationKt")
 }
 
+application {
+    mainClass.set("com.github.emberlyte.ApplicationKt")
+}
+
+ktor {
+    fatJar {
+        archiveFileName.set("app.jar")
+    }
+}
+
 kotlin {
     jvmToolchain(21)
 }
@@ -35,3 +45,4 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
+
