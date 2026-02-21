@@ -1,15 +1,16 @@
 package com.github.emberlyte
 
+import com.github.emberlyte.constats.BotConstats
 import com.github.emberlyte.dto.Config
 import com.github.emberlyte.service.IpService
 import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.ExperimentalHoplite
 import dev.inmo.tgbotapi.extensions.api.send.reply
-import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.extensions.api.telegramBot
 import dev.inmo.tgbotapi.extensions.behaviour_builder.buildBehaviourWithLongPolling
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onCommand
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onContentMessage
+import dev.inmo.tgbotapi.types.message.HTML
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import org.slf4j.LoggerFactory
 
@@ -28,9 +29,16 @@ suspend fun main() {
 
     val ipService = IpService()
 
+    val constant: BotConstats = BotConstats
+
+
     bot.buildBehaviourWithLongPolling {
         onCommand("start") {
-            reply(it, "Привет")
+            reply(it, constant.welcomeMessage, parseMode = HTML)
+        }
+
+        onCommand("privacy") {
+            reply(it, constant.privacyMessage, parseMode = HTML)
         }
 
         onContentMessage { message ->
@@ -49,13 +57,15 @@ suspend fun main() {
                     val result = ipService.sendRequest(ip)
 
                     val messageText = """
-        🔍 Информация об IP: ${result?.ip}
-        🌍 Континент: ${result?.continent}
-        🇩🇪 Страна: ${result?.country} (${result?.countryCode})
-        🏢 Провайдер: ${result?.asName}
-    """.trimIndent()
+🔍 <b>Информация об IP:</b> <code>${result?.ip}</code>
+🌍 <b>Континент:</b> ${result?.continent}
+🗺️ <b>Страна:</b> ${result?.country} (${result?.countryCode})
+🏢 <b>Провайдер:</b> ${result?.asName}
+🔢 <b>ASN:</b> <code>${result?.asn}</code>
+🌐 <b>Домен:</b> ${result?.asDomain}
+""".trimIndent()
 
-                    reply(message, messageText)
+                    reply(message, messageText, parseMode = HTML)
                 } else {
                     reply(message, "Я получил ваш текст, но IP-адреса в нем нет.")
                 }
